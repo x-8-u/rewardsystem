@@ -13,6 +13,7 @@ import { showAchievementRedDot, showCollectionTabRedDot } from './achievements.j
 import { $, escapeHtml } from './dom.js';
 import { showMilestoneModal } from './ui-settings.js';
 import { recordTaskEvent } from './tasks-tracker.js';
+import { writeClipboard } from './bridge.js';
 
 export function showToast(msg, duration = CONFIG.TOAST_DURATION_MS) {
   const toast = $('toast');
@@ -204,16 +205,8 @@ export function copyLogsToClipboard(logs, title) {
     return `${log.date}  ${log.desc}  ${amountText}${invested}`;
   });
   const text = title + '\n' + lines.join('\n');
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('流水已复制到剪贴板');
-  }).catch(() => {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    showToast('流水已复制到剪贴板');
+  writeClipboard(text).then((ok) => {
+    showToast(ok ? '流水已复制到剪贴板' : '复制失败');
   });
 }
 

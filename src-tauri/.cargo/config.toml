@@ -1,0 +1,16 @@
+# 关键：F 盘 exFAT 不支持硬链接与高精度时间戳，
+# 必须将 target-dir 重定向到 NTFS 分区，否则 Cargo 全量 rebuild。
+[build]
+target-dir = "C:\\cargo-target\\reward-tauri"
+
+# 增量编译：dev 模式开启
+[profile.dev]
+incremental = true
+
+# 依赖项以 O1 编译一次即可，大幅缩短首次构建时间
+[profile.dev.package."*"]
+opt-level = 1
+
+# release 模式也复用同一 target 目录
+[profile.release]
+incremental = false

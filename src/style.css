@@ -32,20 +32,20 @@
   --btn-disabled-hover-bg: #777;
 
   /* ===== 按钮底图 ===== */
-  --btn-bg-window: url('img/windowbuttonbackground.webp');
-  --btn-bg-coin: url('img/buttonbackgroundcoin.webp');
-  --btn-bg-action: url('img/buttenbackground.webp');
-  --btn-bg-item: url('img/item.webp');
-  --btn-bg-box-closed: url('img/boxclose.webp');
-  --btn-bg-box-open: url('img/boxopen.webp');
+  --btn-bg-window: url('/img/windowbuttonbackground.webp');
+  --btn-bg-coin: url('/img/buttonbackgroundcoin.webp');
+  --btn-bg-action: url('/img/buttenbackground.webp');
+  --btn-bg-item: url('/img/item.webp');
+  --btn-bg-box-closed: url('/img/boxclose.webp');
+  --btn-bg-box-open: url('/img/boxopen.webp');
 
   /* ===== 其他背景图 ===== */
-  --bg-modal: url('img/windowbackground.webp');
-  --bg-textfield-long: url('img/textfieldlong.webp');
-  --bg-textfield-medium: url('img/textfieldmedium.webp');
-  --bg-textfield-short: url('img/textfieldshort.webp');
-  --bg-textfield-extrashort: url('img/textfieldextrashort.webp');
-  --bg-progressbar: url('img/progressbar.webp');
+  --bg-modal: url('/img/windowbackground.webp');
+  --bg-textfield-long: url('/img/textfieldlong.webp');
+  --bg-textfield-medium: url('/img/textfieldmedium.webp');
+  --bg-textfield-short: url('/img/textfieldshort.webp');
+  --bg-textfield-extrashort: url('/img/textfieldextrashort.webp');
+  --bg-progressbar: url('/img/progressbar.webp');
 
   /* ===== 按钮通用属性 ===== */
   --btn-font-family: 'LXGW WenKai Medium', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;

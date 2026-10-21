@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "只登一步",
+  "version": "1.0.0",
+  "identifier": "com.fieldofharmony.reward",
+  "build": {
+    "devUrl": "http://127.0.0.1:2000",
+    "frontendDist": "../dist",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "只登一步",
+        "width": 420,
+        "height": 760,
+        "minWidth": 360,
+        "minHeight": 600,
+        "resizable": true,
+        "center": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: asset: http://asset.localhost; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' asset: http://asset.localhost; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "nsis"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico",
+      "icons/icon.png"
+    ],
+    "category": "Productivity",
+    "shortDescription": "周易八卦奖励转盘",
+    "longDescription": "基于周易八卦的奖励转盘系统，通过抽签、投币、转盘玩法定制个人任务奖励，哄自己做该做的事。"
+  },
+  "plugins": {}
+}

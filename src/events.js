@@ -19,6 +19,7 @@ import {
 import { $ } from './dom.js';
 import { recordTaskEvent, recordPageOpen } from './tasks-tracker.js';
 import { playSound, isSoundEnabled, setSoundEnabled } from './sound.js';
+import { getFlag, setFlag, exportState, importState } from './bridge.js';
 
 // 本地日期字符串（与 state.js 的 _todayStr 保持一致）
 function _todayStr() {
@@ -62,7 +63,8 @@ function bindCloseAndAction(btnId, modalId, action) {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// 导出初始化函数：由 main.js 在 initState 完成后调用
+export function initEvents() {
   // 抽签
   bindClick('lot-container', drawLot);
 
@@ -248,9 +250,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 导出数据
-  bindClick('export-data-btn', () => {
+  bindClick('export-data-btn', async () => {
     try {
-      const dataStr = JSON.stringify(getState(), null, 2);
+      // 优先用 Rust 侧 export_state（保证与磁盘一致）
+      let dataStr;
+      try {
+        dataStr = await exportState();
+      } catch {
+        // 回退到内存态
+        dataStr = JSON.stringify(getState(), null, 2);
+      }
       const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -311,9 +320,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => {
+    reader.onload = async (ev) => {
       try {
         const parsed = JSON.parse(ev.target.result);
+        // 通过 Rust 侧 import_state 落盘（含最小迁移）
+        await importState(parsed);
+        // 再经 JS migrateState 完整字段补全，刷新内存与 UI
         const migrated = migrateState(parsed);
         replaceState(migrated);
         checkMilestones();
@@ -364,23 +376,29 @@ document.addEventListener('DOMContentLoaded', () => {
   UI.updateTaskButtonVisibility();
   recordPageOpen();
 
-  // 首次访问显示健康游戏忠告
-  if (!localStorage.getItem(CONFIG.HEALTH_NOTICE_KEY)) {
-    $('health-notice-modal').classList.add('active');
-  } else if (localStorage.getItem(CONFIG.ONBOARDING_KEY)) {
-    // 已完成防沉迷和新手引导：每天首次打开自动弹出每日签到
-    const today = _todayStr();
-    if (localStorage.getItem(CONFIG.LAST_DAILY_SIGNIN_KEY) !== today) {
-      localStorage.setItem(CONFIG.LAST_DAILY_SIGNIN_KEY, today);
-      UI.openDailySignin();
+  // 首次访问显示健康游戏忠告（flag 异步读取，初始不弹；加载后再决定）
+  (async () => {
+    const healthShown = await getFlag(CONFIG.HEALTH_NOTICE_KEY);
+    const onboardingShown = await getFlag(CONFIG.ONBOARDING_KEY);
+    if (!healthShown) {
+      $('health-notice-modal').classList.add('active');
+    } else if (onboardingShown) {
+      // 已完成防沉迷和新手引导：每天首次打开自动弹出每日签到
+      const today = _todayStr();
+      const lastSignin = await getFlag(CONFIG.LAST_DAILY_SIGNIN_KEY);
+      if (lastSignin !== today) {
+        await setFlag(CONFIG.LAST_DAILY_SIGNIN_KEY, today);
+        UI.openDailySignin();
+      }
     }
-  }
-  bindClick('health-notice-confirm', () => {
-    localStorage.setItem(CONFIG.HEALTH_NOTICE_KEY, '1');
+  })();
+  bindClick('health-notice-confirm', async () => {
+    await setFlag(CONFIG.HEALTH_NOTICE_KEY, '1');
     $('health-notice-modal').classList.remove('active');
     // 防沉迷关闭后，首次访问自动弹出新手任务（仅一次）
-    if (!localStorage.getItem(CONFIG.ONBOARDING_KEY)) {
-      localStorage.setItem(CONFIG.ONBOARDING_KEY, '1');
+    const onboardingShown = await getFlag(CONFIG.ONBOARDING_KEY);
+    if (!onboardingShown) {
+      await setFlag(CONFIG.ONBOARDING_KEY, '1');
       UI.openTasksModal();
     }
   });
@@ -458,4 +476,4 @@ document.addEventListener('DOMContentLoaded', () => {
       setSoundEnabled(soundCheckbox.checked);
     });
   }
-});
+}

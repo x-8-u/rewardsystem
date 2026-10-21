@@ -98,9 +98,9 @@ export const CONFIG = {
   COLOR_GRAY_SUB: '#999',
   COLOR_TAIJI_TEXT: '#1a1a2e',
 
-  // 图片路径
-  IMG_ITEM: 'img/item.webp',
-  IMG_BAGUA: 'img/bagua.webp',
+  // 图片路径（public/ 下用绝对路径）
+  IMG_ITEM: '/img/item.webp',
+  IMG_BAGUA: '/img/bagua.webp',
 
   // 本地存储键
   STORAGE_KEY: 'rewardWheelState',

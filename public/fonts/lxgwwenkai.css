@@ -1,0 +1,14 @@
+/* ===== LXGW WenKai Medium 本地化字体 =====
+ * 原 CDN：https://cdn.jsdelivr.net/npm/@chinese-fonts/lxgwwenkai/dist/LXGWWenKai-Medium/result.css
+ * 迁移到桌面端后改为本地加载，保证离线可用。
+ *
+ * 字体文件请下载 woff2 子集放到本目录（public/fonts/）：
+ *   1. 访问 https://cdn.jsdelivr.net/npm/@chinese-fonts/lxgwwenkai/dist/LXGWWenKai-Medium/
+ *   2. 把 result.css 中引用的 .woff2 文件下载到 public/fonts/
+ *   3. 把 result.css 的内容粘贴到本文件，并将 url() 中的远程路径改为相对路径 './xxx.woff2'
+ *
+ * 在未下载字体文件前，本文件保持空规则，应用会回退到 style.css 中定义的
+ * 'PingFang SC' / 'Microsoft YaHei' 系统字体，不影响功能。
+ */
+
+/* 占位：字体文件下载后在此粘贴 @font-face 规则 */

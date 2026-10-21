@@ -1,0 +1,31 @@
+[package]
+name = "reward-tauri"
+version = "1.0.0"
+description = "只登一步 - 周易八卦奖励转盘桌面应用"
+authors = ["fieldOfHarmony"]
+edition = "2021"
+rust-version = "1.77"
+
+# 库与二进制共用：lib.rs 暴露 run()，main.rs 仅调用
+[lib]
+name = "reward_tauri_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-clipboard-manager = "2"
+tauri-plugin-single-instance = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+parking_lot = "0.12"
+thiserror = "1"
+
+[features]
+# 默认启用自定义协议
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

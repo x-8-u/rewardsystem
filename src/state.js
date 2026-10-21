@@ -4,6 +4,7 @@
 
 import { CONFIG, TRIGRAMS, getBaguaTypes, TALISMANS, DAILY_TASKS, ONBOARDING_LINES, ONBOARDING_TASK_IDS, COLLECTION_CHESTS } from './config.js';
 import { DEFAULT_MILESTONES, DEFAULT_SHOP_ITEMS, DEFAULT_TASKS } from './defaultSettings.js';
+import { loadState as bridgeLoad, saveState as bridgeSave, flushState as bridgeFlush } from './bridge.js';
 
 const STORAGE_KEY = CONFIG.STORAGE_KEY;
 
@@ -180,29 +181,45 @@ export function migrateState(parsed) {
   return parsed;
 }
 
-function loadState() {
+// ===== 异步初始化（Tauri 模式下从 Rust 侧加载）=====
+// 启动时由 main.js 调用一次，加载完成后填充 _state。
+let _state = getDefaultState();   // 先用默认值占位，initState 完成前 UI 不渲染
+let _ready = false;
+const _subscribers = new Set();
+let _saveTimer = null;
+
+export async function initState() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      return migrateState(JSON.parse(saved));
+    const loaded = await bridgeLoad();
+    if (loaded && typeof loaded === 'object' && Object.keys(loaded).length > 0) {
+      _state = migrateState(loaded);
+    } else {
+      _state = getDefaultState();
     }
   } catch (e) {
-    // 解析失败时记录警告并回退到默认状态，避免静默吞错
-    console.warn('[state] 读取本地数据失败，使用默认状态:', e);
+    console.warn('[state] 从 Rust 侧加载失败，使用默认状态:', e);
+    _state = getDefaultState();
   }
-  return getDefaultState();
+  _ready = true;
 }
 
-// ===== 私有 state + 订阅 =====
-let _state = loadState();
-const _subscribers = new Set();
+export function isStateReady() { return _ready; }
 
 // 读取状态（返回内部对象引用，可直接读取字段；写入请通过 commit/replaceState 触发通知）
 export function getState() { return _state; }
 
-// 持久化（不触发通知）
+// 持久化（不触发通知）—— 防抖落盘到 Rust 侧文件
 export function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(_state));
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    bridgeSave(_state).catch(e => console.error('[state] 落盘失败:', e));
+  }, 300);
+}
+
+// 立即落盘（窗口关闭前调用，跳过防抖）
+export function flushState() {
+  clearTimeout(_saveTimer);
+  return bridgeFlush();
 }
 
 // 持久化并通知所有订阅者（用于直接修改 _state 后刷新 UI）

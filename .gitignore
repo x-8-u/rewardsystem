@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+src-tauri/target/
+src-tauri/gen/
+
+# 重定向到 NTFS 的 cargo target（不在项目内，但仍忽略同名目录以防误生成）
+**/target/
+
+# Tauri
+.tauri/
+
+# IDE
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+npm-debug.log*
+
+# 环境变量
+.env
+.env.local

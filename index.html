@@ -5,22 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>只登一步</title>
   <meta name="description" content="基于周易八卦的奖励转盘系统，通过抽签、投币、转盘玩法定制个人任务奖励，哄自己做该做的事。">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chinese-fonts/lxgwwenkai/dist/LXGWWenKai-Medium/result.css">
-  <link rel="icon" type="image/png" href="img/bagua.webp">
-
-  <!-- Cloudflare Web Analytics：无 cookie，看 PV/UV/来源 -->
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon='{"token": "872cf518c0274449934d9234faf50b91"}'></script>
-
-  <!-- Google Analytics 4：看漏斗/留存/事件 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DVHTMLGF3K"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-DVHTMLGF3K');
-  </script>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/fonts/lxgwwenkai.css">
+  <link rel="icon" type="image/png" href="/img/bagua.webp">
 </head>
 <body>
   <!-- 备份提醒条 -->
@@ -33,12 +20,12 @@
   <!-- 主界面 -->
   <div id="main-screen">
     <div id="info-buttons">
-      <button id="coin-info-btn" class="info-coin-btn"><img src="img/package.webp" class="btn-icon">铜币：<span id="coin-total-count">0</span><span class="red-dot"></span></button>
-      <button id="points-info-btn" class="info-coin-btn"><img src="img/point.webp" class="btn-icon">贝筹：<span id="points">0</span></button>
+      <button id="coin-info-btn" class="info-coin-btn"><img src="/img/package.webp" class="btn-icon">铜币：<span id="coin-total-count">0</span><span class="red-dot"></span></button>
+      <button id="points-info-btn" class="info-coin-btn"><img src="/img/point.webp" class="btn-icon">贝筹：<span id="points">0</span></button>
     </div>
 
     <div id="lot-container" title="抽签">
-      <img id="lot-img" src="img/container.webp" alt="签筒">
+      <img id="lot-img" src="/img/container.webp" alt="签筒">
     </div>
 
     <!-- 里程碑进度条 -->
@@ -271,11 +258,11 @@
           <h3>关于</h3>
           <p class="hint">主页会随机掉落生产力相关内容和工具，如果有问题或建议，可以去这些地方找我</p>
           <div class="about-links">
-            <a class="about-link" href="https://b23.tv/yWJkTSC" target="_blank" rel="noopener noreferrer" title="哔哩哔哩">
-              <img src="img/logo/bilibili.webp" alt="哔哩哔哩">
+            <a class="about-link" data-ext-url="https://b23.tv/yWJkTSC" title="哔哩哔哩">
+              <img src="/img/logo/bilibili.webp" alt="哔哩哔哩">
             </a>
-            <a class="about-link" href=" https://xhslink.com/m/6I6pbFn5aWa" target="_blank" rel="noopener noreferrer" title="小红书">
-              <img src="img/logo/red.webp" alt="小红书">
+            <a class="about-link" data-ext-url="https://xhslink.com/m/6I6pbFn5aWa" title="小红书">
+              <img src="/img/logo/red.webp" alt="小红书">
             </a>
           </div>
         </div>
@@ -314,7 +301,7 @@
         <button class="help-tab" data-tab="detail">详细说明</button>
       </div>
       <div class="help-panel active" data-panel="quick">
-        <img src="img/brief.png" alt="快速上手" class="quick-brief-img" onclick="document.getElementById('img-viewer').classList.add('active')" style="cursor:zoom-in">
+        <img src="/img/brief.png" alt="快速上手" class="quick-brief-img" onclick="document.getElementById('img-viewer').classList.add('active')" style="cursor:zoom-in">
       </div>
       <div class="help-panel" data-panel="detail">
       <h2>详细使用说明</h2>
@@ -433,7 +420,7 @@
       </div>
       <div class="coin-info-section">
         <h3>十五、致谢</h3>
-        <p>部分机制灵感来自 <a href="https://youtu.be/Qji8_5XgMW4?si=cU89Jj_rvS10FVjl" target="_blank" rel="noopener">I built a habit system as addicting as a casino</a> ，SpoonFedStudy 的主页有很多很棒的生产力视频，强力推荐。</p>
+        <p>部分机制灵感来自 <a data-ext-url="https://youtu.be/Qji8_5XgMW4?si=cU89Jj_rvS10FVjl">I built a habit system as addicting as a casino</a> ，SpoonFedStudy 的主页有很多很棒的生产力视频，强力推荐。</p>
       </div>
       </div>
       <button class="btn-close btn-window" id="help-close">知道了</button>
@@ -690,9 +677,9 @@
 
   <!-- 图片大图查看器 -->
   <div id="img-viewer" onclick="this.classList.remove('active')">
-    <img src="img/brief.png" alt="快速上手" onclick="event.stopPropagation()">
+    <img src="/img/brief.png" alt="快速上手" onclick="event.stopPropagation()">
   </div>
 
-  <script type="module" src="app.js"></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
